@@ -106,6 +106,32 @@ class MakeModule extends Command
         fclose($file);
     }
     /**
+     * Add sidebar link for module.
+     *
+     */
+    protected function addSidebar(){
+        $fileContent = file_get_contents(base_path("resources/adminapp/js/pages/Layout/DashboardLayout.vue"));
+        $fileContent = str_replace('sidebarLinks: [',$this->getModuleRoutes(), $fileContent);
+        $file = fopen(base_path("resources/adminapp/js/routes/routes.js"), 'w+');
+        fwrite($file, $fileContent);
+        fclose($file);
+    }
+    /**
+     *
+     * Return sidebar code.
+     * @return String
+     */
+    protected function getModuleSideBarCode(){
+        return "
+        sidebarLinks: [
+            {
+              title: '{$this->ArgumentPlu}',
+              icon: 'table_view',
+              path: { name: '{$this->argumentPlu}.index' },
+              gate: '{$this->argument}_access'
+            },";
+    }
+    /**
      *
      * Return module routes to vue router.
      * @return String
