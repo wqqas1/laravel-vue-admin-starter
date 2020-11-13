@@ -45,7 +45,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Vue QA'
+      default: 'Vue Starter'
     },
     backgroundImage: {
       type: String,
