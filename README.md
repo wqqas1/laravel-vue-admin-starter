@@ -27,6 +27,6 @@ This will create
 
 
 ### Todo
--[ ] Change router to dynamically load everything from routes folder   
--[ ] Change store to dynamically load everything from store folder  
--[ ] Change to inertia.js when intertia.js is at v2 atleast 
+- [ ] Change router to dynamically load everything from routes folder   
+- [ ] Change store to dynamically load everything from store folder  
+- [ ] Change to inertia.js when intertia.js is at v2 atleast 
