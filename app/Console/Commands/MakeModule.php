@@ -42,13 +42,14 @@ class MakeModule extends Command
         $this->argumentPlu = Str::plural(strtolower($this->argument('name')));
         $this->argument = strtolower($this->argument('name'));
         $this->Argument = ucfirst($this->argument('name'));
-        /*
+
         foreach ($this->getFiles() as $file => $path) {
             $this->createStub($file, $path);
         }
-        */
+
         $this->addRoutes();
         $this->addStore();
+        $this->addSidebar();
         $this->showOutput();
     }
 
@@ -111,8 +112,8 @@ class MakeModule extends Command
      */
     protected function addSidebar(){
         $fileContent = file_get_contents(base_path("resources/adminapp/js/pages/Layout/DashboardLayout.vue"));
-        $fileContent = str_replace('sidebarLinks: [',$this->getModuleRoutes(), $fileContent);
-        $file = fopen(base_path("resources/adminapp/js/routes/routes.js"), 'w+');
+        $fileContent = str_replace('sidebarLinks: [',$this->getModuleSideBarCode(), $fileContent);
+        $file = fopen(base_path("resources/adminapp/js/pages/Layout/DashboardLayout.vue"), 'w+');
         fwrite($file, $fileContent);
         fclose($file);
     }

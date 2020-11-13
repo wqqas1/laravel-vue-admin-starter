@@ -15,52 +15,52 @@
 </template>
 
 <script>
-import DashboardContent from './Content.vue'
-import TopNavbar from './TopNavbar.vue'
-import MobileMenu from './MobileMenu.vue'
+  import DashboardContent from './Content.vue'
+  import TopNavbar from './TopNavbar.vue'
+  import MobileMenu from './MobileMenu.vue'
 
-export default {
-  components: {
-    DashboardContent,
-    TopNavbar,
-    MobileMenu
-  },
-  data() {
-    return {
-      sidebarLinks: [
-        {
-          title: 'Dashboard',
-          icon: 'dashboard',
-          path: { name: 'dashboard' }
-        },
-        {
-          title: 'User Management',
-          icon: 'person',
-          path: { name: 'user_management' },
-          gate: 'user_management_access',
-          children: [
-            {
-              title: 'Permissions',
-              icon: 'perm_data_setting',
-              path: { name: 'permissions.index' },
-              gate: 'permission_access'
-            },
-            {
-              title: 'Roles',
-              icon: 'group',
-              path: { name: 'roles.index' },
-              gate: 'role_access'
-            },
-            {
-              title: 'Users',
-              icon: 'person',
-              path: { name: 'users.index' },
-              gate: 'user_access'
-            }
-          ]
-        }
-      ]
+  export default {
+    components: {
+      DashboardContent,
+      TopNavbar,
+      MobileMenu
+    },
+    data() {
+      return {
+        sidebarLinks: [
+          {
+            title: 'Dashboard',
+            icon: 'dashboard',
+            path: { name: 'dashboard' }
+          },
+          {
+            title: 'User Management',
+            icon: 'person',
+            path: { name: 'user_management' },
+            gate: 'user_management_access',
+            children: [
+              {
+                title: 'Permissions',
+                icon: 'perm_data_setting',
+                path: { name: 'permissions.index' },
+                gate: 'permission_access'
+              },
+              {
+                title: 'Roles',
+                icon: 'group',
+                path: { name: 'roles.index' },
+                gate: 'role_access'
+              },
+              {
+                title: 'Users',
+                icon: 'person',
+                path: { name: 'users.index' },
+                gate: 'user_access'
+              }
+            ]
+          }
+        ]
+      }
     }
   }
-}
 </script>
