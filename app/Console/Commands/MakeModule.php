@@ -38,14 +38,18 @@ class MakeModule extends Command
      */
     public function handle()
     {
-        $this->ucArgument = ucfirst($this->argument('name'));
-        $this->loArgument = strtolower($this->argument('name'));
-
+        $this->ArgumentPlu = Str::plural(ucfirst($this->argument('name')));
+        $this->argumentPlu = Str::plural(strtolower($this->argument('name')));
+        $this->argument = strtolower($this->argument('name'));
+        $this->Argument = ucfirst($this->argument('name'));
+        /*
         foreach ($this->getFiles() as $file => $path) {
             $this->createStub($file, $path);
         }
-
-        $this->showOutput($this->ucArgument);
+        */
+        $this->addRoutes();
+        $this->addStore();
+        $this->showOutput();
     }
 
     /**
@@ -55,28 +59,21 @@ class MakeModule extends Command
      */
     protected function getFiles()
     {
-        $ModulePlural =  Str::plural($this->loArgument);
-        $lowModulePlural = strtolower($ModulePlural);
-        $ucfModulePlural = ucfirst($ModulePlural);
-        $camelModulePlural = (Str::camel($ModulePlural));
 
-        $lowModule = $this->loArgument;
-        $ucfModule = ucfirst($lowModule);
-        $camelModule = (Str::camel($lowModule));
-        mkdir(base_path("resources/adminapp/js/cruds/{$ucfModulePlural}"), 0755);
-        mkdir(base_path("resources/adminapp/js/store/cruds/{$ucfModulePlural}"), 0755);
+        mkdir(base_path("resources/adminapp/js/cruds/{$this->ArgumentPlu}"), 0755);
+        mkdir(base_path("resources/adminapp/js/store/cruds/{$this->ArgumentPlu}"), 0755);
         $files = [
-            'app.Models.Model.php.stub' => "app/Models/{$ucfModule}.php",
-            'app.Http.Controllers.Api.V1.Admin.ApiController.php.stub' => "app/Http/Controllers/Api/V1/Admin/{$ucfModulePlural}ApiController.php",
-            'app.Http.Requests.StoreRequest.php.stub' => "app/Http/Requests/Store{$ucfModule}Request.php",
-            'app.Http.Requests.UpdateRequest.php.stub' => "app/Http/Requests/Update{$ucfModule}Request.php",
-            'app.Http.Resources.Admin.Resource.php.stub' => "app/Http/Resources/Admin/{$ucfModule}Resource.php",
-            'resources.adminapp.js.cruds.Create.vue.stub' => "resources/adminapp/js/cruds/{$ucfModulePlural}/Create.vue",
-            'resources.adminapp.js.cruds.Edit.vue.stub' => "resources/adminapp/js/cruds/{$ucfModulePlural}/Edit.vue",
-            'resources.adminapp.js.cruds.Index.vue.stub' => "resources/adminapp/js/cruds/{$ucfModulePlural}/Index.vue",
-            'resources.adminapp.js.cruds.Show.vue.stub' => "resources/adminapp/js/cruds/{$ucfModulePlural}/Show.vue",
-            'resources.adminapp.js.store.cruds.index.js.stub' => "resources/adminapp/js/store/cruds/{$ucfModulePlural}/index.js",
-            'resources.adminapp.js.store.cruds.single.js.stub' => "resources/adminapp/js/store/cruds/{$ucfModulePlural}/single.js",
+            'app.Models.Model.php.stub' => "app/Models/{$this->Argument}.php",
+            'app.Http.Controllers.Api.V1.Admin.ApiController.php.stub' => "app/Http/Controllers/Api/V1/Admin/{$this->ArgumentPlu}ApiController.php",
+            'app.Http.Requests.StoreRequest.php.stub' => "app/Http/Requests/Store{$this->Argument}Request.php",
+            'app.Http.Requests.UpdateRequest.php.stub' => "app/Http/Requests/Update{$this->Argument}Request.php",
+            'app.Http.Resources.Admin.Resource.php.stub' => "app/Http/Resources/Admin/{$this->Argument}Resource.php",
+            'resources.adminapp.js.cruds.Create.vue.stub' => "resources/adminapp/js/cruds/{$this->ArgumentPlu}/Create.vue",
+            'resources.adminapp.js.cruds.Edit.vue.stub' => "resources/adminapp/js/cruds/{$this->ArgumentPlu}/Edit.vue",
+            'resources.adminapp.js.cruds.Index.vue.stub' => "resources/adminapp/js/cruds/{$this->ArgumentPlu}/Index.vue",
+            'resources.adminapp.js.cruds.Show.vue.stub' => "resources/adminapp/js/cruds/{$this->ArgumentPlu}/Show.vue",
+            'resources.adminapp.js.store.cruds.index.js.stub' => "resources/adminapp/js/store/cruds/{$this->ArgumentPlu}/index.js",
+            'resources.adminapp.js.store.cruds.single.js.stub' => "resources/adminapp/js/store/cruds/{$this->ArgumentPlu}/single.js",
 
         ];
 
@@ -96,10 +93,10 @@ class MakeModule extends Command
         $stub = str_replace(
             ['{{ DummyText }}', '{{ dummyText }}', '{{ DummyTextPlu }}', '{{ dummyTextPlu }}'],
             [
-                ucfirst($this->argument('name')),
-                strtolower($this->argument('name')),
-                Str::plural(ucfirst($this->argument('name'))),
-                Str::plural(strtolower($this->argument('name'))),
+                $this->Argument,
+                $this->argument,
+                $this->ArgumentPlu,
+                $this->argumentPlu,
             ],
             $fileContent
         );
@@ -107,6 +104,91 @@ class MakeModule extends Command
         $file = fopen(base_path("{$path}"), 'w+');
         fwrite($file, $stub);
         fclose($file);
+    }
+    /**
+     *
+     * Return module routes to vue router.
+     * @return String
+     */
+    protected function getModuleRoutes(){
+        return"\n
+        children: [
+            {
+                path: '{$this->argumentPlu}',
+                name: '{$this->argumentPlu}.index',
+                component: () => import('@cruds/{$this->ArgumentPlu}/Index.vue'),
+                meta: { title: '{$this->ArgumentPlu}' }
+              },
+              {
+                path: '{$this->argumentPlu}/create',
+                name: '{$this->argumentPlu}.create',
+                component: () => import('@cruds/{$this->ArgumentPlu}/Create.vue'),
+                meta: { title: '{$this->ArgumentPlu}' }
+              },
+              {
+                path: '{$this->argumentPlu}/:id',
+                name: '{$this->argumentPlu}.show',
+                component: () => import('@cruds/{$this->ArgumentPlu}/Show.vue'),
+                meta: { title: '{$this->ArgumentPlu}' }
+              },
+              {
+                path: '{$this->argumentPlu}/:id/edit',
+                name: '{$this->argumentPlu}.edit',
+                component: () => import('@cruds/{$this->ArgumentPlu}/Edit.vue'),
+                meta: { title: '{$this->ArgumentPlu}' 
+              }
+            },
+      ";
+    }
+
+    /**
+     * Add module routes to vue router.
+     *
+     */
+    protected function addRoutes(){
+        $fileContent = file_get_contents(base_path("resources/adminapp/js/routes/routes.js"));
+        $fileContent = str_replace('children: [',$this->getModuleRoutes(), $fileContent);
+        $file = fopen(base_path("resources/adminapp/js/routes/routes.js"), 'w+');
+        fwrite($file, $fileContent);
+        fclose($file);
+    }
+
+    /**
+     * Add module store requests to vuex store.
+     *
+     */
+    protected function addStore(){
+        $fileContent = file_get_contents(base_path("resources/adminapp/js/store/store.js"));
+        $fileContent = str_replace('Vue.use(Vuex)',$this->getModuleStoreImports(),$fileContent);
+        $fileContent = str_replace('modules: {',$this->getModuleStoreModules(),$fileContent);
+        $file = fopen(base_path("resources/adminapp/js/store/store.js"), 'w+');
+        fwrite($file, $fileContent);
+        fclose($file);
+    }
+
+    /**
+     *
+     * Return module store imports to vue router.
+     * @return String
+     */
+    protected function getModuleStoreImports(){
+        return "\n
+    import {$this->ArgumentPlu}Index from './cruds/{$this->ArgumentPlu}'
+    import {$this->ArgumentPlu}Single from './cruds/{$this->ArgumentPlu}/single'\n
+    Vue.use(Vuex)
+      ";
+    }
+    /**
+     *
+     * Return module store imports to vue router.
+     * @return String
+     */
+    protected function getModuleStoreModules(){
+        return "
+      modules: {
+        {$this->ArgumentPlu}Index,
+        {$this->ArgumentPlu}Single,
+      ";
     }
 
     /**
@@ -116,61 +198,9 @@ class MakeModule extends Command
      */
     protected function showOutput()
     {
-        $ArgumentPlu = Str::plural(ucfirst($this->argument('name')));
-        $argumentPlu = Str::plural(strtolower($this->argument('name')));
-        $argument = strtolower($this->argument('name'));
-        $Argument = ucfirst($this->argument('name'));
 
-        $this->info('Please add following routes to: resources/adminapp/js/routes/routes.js');
 
-        $this->info("\n
-        {
-            path: '{$argumentPlu}',
-            name: '{$argumentPlu}.index',
-            component: () => import('@cruds/{$ArgumentPlu}/Index.vue'),
-            meta: { title: '{$ArgumentPlu}' }
-          },
-          {
-            path: '{$argumentPlu}/create',
-            name: '{$argumentPlu}.create',
-            component: () => import('@cruds/{$ArgumentPlu}/Create.vue'),
-            meta: { title: '{$ArgumentPlu}' }
-          },
-          {
-            path: '{$argumentPlu}/:id',
-            name: '{$argumentPlu}.show',
-            component: () => import('@cruds/{$ArgumentPlu}/Show.vue'),
-            meta: { title: '{$ArgumentPlu}' }
-          },
-          {
-            path: '{$argumentPlu}/:id/edit',
-            name: '{$argumentPlu}.edit',
-            component: () => import('@cruds/{$ArgumentPlu}/Edit.vue'),
-            meta: { title: '{$ArgumentPlu}' 
-          }
-        }
-      ");
-
-        $this->info("Please add following to: resources/adminapp/js/store/store.js\n
-        before \n
-        Vue.use(Vuex)
-        ");
-
-        $this->info("\n
-        import {$ArgumentPlu}Index from './cruds/{$ArgumentPlu}'\n
-        import {$ArgumentPlu}Single from './cruds/{$ArgumentPlu}/single'\n
-      ");
-
-        $this->info("Please add following to: resources/adminapp/js/store/store.js\n
-        after \n
-        export default new Vuex.Store({
-            modules: {
-        ");
-
-        $this->info("\n
-        {$ArgumentPlu}Index,\n
-        {$ArgumentPlu}Single,\n
-      ");
+        $this->info("Module {$this->Argument} created successfully!");
 
     }
 }
