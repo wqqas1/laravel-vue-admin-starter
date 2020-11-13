@@ -24,6 +24,10 @@ class Role extends Model
         'updated_at',
     ];
 
+    public $filterable = [
+        'title'
+    ];
+
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
