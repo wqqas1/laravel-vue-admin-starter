@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Store{{ DummyText }}Request;
+use App\Http\Requests\Update{{ DummyText }}Request;
+use App\Http\Resources\Admin\{{ DummyText }}Resource;
+use App\Models\{{ DummyText }};
+use Gate;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
+class {{ DummyTextPlu }}ApiController extends Controller
+{
+    public function index()
+    {
+        abort_if(Gate::denies('{{ dummyText }}_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        return new {{ DummyText }}Resource({{ DummyText }}::advancedFilter());
+    }
+
+    public function store(Store{{ DummyText }}Request $request)
+    {
+        ${{ dummyText }} = {{ DummyText }}::create($request->validated());
+
+        return (new {{ DummyText }}Resource(${{ dummyText }}))
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
+    }
+
+    public function create({{ DummyText }} ${{ dummyText }})
+    {
+        abort_if(Gate::denies('{{ dummyText }}_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        return response([
+            'meta' => [],
+        ]);
+    }
+
+    public function show({{ DummyText }} ${{ dummyText }})
+    {
+        abort_if(Gate::denies('{{ dummyText }}_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        return new {{ DummyText }}Resource(${{ dummyText }});
+    }
+
+    public function update(Update{{ DummyText }}Request $request, {{ DummyText }} ${{ dummyText }})
+    {
+        ${{ dummyText }}->update($request->validated());
+
+        return (new {{ DummyText }}Resource(${{ dummyText }}))
+            ->response()
+            ->setStatusCode(Response::HTTP_ACCEPTED);
+    }
+
+    public function edit({{ DummyText }} ${{ dummyText }})
+    {
+        abort_if(Gate::denies('{{ dummyText }}_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        return response([
+            'data' => new {{ DummyText }}Resource(${{ dummyText }}),
+            'meta' => [],
+        ]);
+    }
+
+    public function destroy({{ DummyText }} ${{ dummyText }})
+    {
+        abort_if(Gate::denies('{{ dummyText }}_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        ${{ dummyText }}->delete();
+
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
+}
