@@ -24,7 +24,7 @@ This will create
 5. Vue cruds in `resources/adminapp/js/cruds` 
 6. Vue store requests in `resources/adminapp/js/store/cruds`
 
-Currently does not modify the router.js and store.js but when crud is generated. You will get hint on where and what to add
+
 
 ### Todo
 [ ] Change router to dynamically load everything from routes folder   
