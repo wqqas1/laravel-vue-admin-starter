@@ -40,13 +40,11 @@ class MakeModule extends Command
     {
         $this->ucArgument = ucfirst($this->argument('name'));
         $this->loArgument = strtolower($this->argument('name'));
-        /*
+
         foreach ($this->getFiles() as $file => $path) {
             $this->createStub($file, $path);
         }
-        */
-        $this->addRoutes();
-        $this->addStore();
+
         $this->showOutput($this->ucArgument);
     }
 

@@ -96,55 +96,7 @@ const routes = [
             meta: { title: 'Users' }
           }
         ]
-      },
-      {
-        path: 'cities',
-        name: 'cities.index',
-        component: () => import('@cruds/Cities/Index.vue'),
-        meta: { title: 'Cities' }
-      },
-      {
-        path: 'cities/create',
-        name: 'cities.create',
-        component: () => import('@cruds/Cities/Create.vue'),
-        meta: { title: 'Cities' }
-      },
-      {
-        path: 'cities/:id',
-        name: 'cities.show',
-        component: () => import('@cruds/Cities/Show.vue'),
-        meta: { title: 'Cities' }
-      },
-      {
-        path: 'cities/:id/edit',
-        name: 'cities.edit',
-        component: () => import('@cruds/Cities/Edit.vue'),
-        meta: { title: 'Cities' }
-      },
-      {
-        path: 'categories',
-        name: 'categories.index',
-        component: () => import('@cruds/Categories/Index.vue'),
-        meta: { title: 'Categories' }
-      },
-      {
-        path: 'categories/create',
-        name: 'categories.create',
-        component: () => import('@cruds/Categories/Create.vue'),
-        meta: { title: 'Categories' }
-      },
-      {
-        path: 'categories/:id',
-        name: 'categories.show',
-        component: () => import('@cruds/Categories/Show.vue'),
-        meta: { title: 'Categories' }
-      },
-      {
-        path: 'categories/:id/edit',
-        name: 'categories.edit',
-        component: () => import('@cruds/Categories/Edit.vue'),
-        meta: { title: 'Categories' }
-      },
+      }
     ]
   }
 ]
