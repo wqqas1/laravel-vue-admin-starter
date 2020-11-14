@@ -56,7 +56,7 @@ class MakeModule extends Command
         $this->addSidebar();
 
 
-        $this->createModulePermissions()
+        $this->createModulePermissions();
         $this->call('make:migration', [
             'name' => 'create_' . $this->argument_snake . '_table',
             '--create' => $this->argument_snake
