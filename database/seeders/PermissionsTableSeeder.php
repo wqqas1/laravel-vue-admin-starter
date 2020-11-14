@@ -10,70 +10,22 @@ class PermissionsTableSeeder extends Seeder
     public function run()
     {
         $permissions = [
-            [
-                'id'    => 1,
-                'title' => 'user_management_access',
-            ],
-            [
-                'id'    => 2,
-                'title' => 'permission_create',
-            ],
-            [
-                'id'    => 3,
-                'title' => 'permission_edit',
-            ],
-            [
-                'id'    => 4,
-                'title' => 'permission_show',
-            ],
-            [
-                'id'    => 5,
-                'title' => 'permission_delete',
-            ],
-            [
-                'id'    => 6,
-                'title' => 'permission_access',
-            ],
-            [
-                'id'    => 7,
-                'title' => 'role_create',
-            ],
-            [
-                'id'    => 8,
-                'title' => 'role_edit',
-            ],
-            [
-                'id'    => 9,
-                'title' => 'role_show',
-            ],
-            [
-                'id'    => 10,
-                'title' => 'role_delete',
-            ],
-            [
-                'id'    => 11,
-                'title' => 'role_access',
-            ],
-            [
-                'id'    => 12,
-                'title' => 'user_create',
-            ],
-            [
-                'id'    => 13,
-                'title' => 'user_edit',
-            ],
-            [
-                'id'    => 14,
-                'title' => 'user_show',
-            ],
-            [
-                'id'    => 15,
-                'title' => 'user_delete',
-            ],
-            [
-                'id'    => 16,
-                'title' => 'user_access',
-            ],
+            ['title' => 'user_management_access'],
+            ['title' => 'permission_create'],
+            ['title' => 'permission_edit'],
+            ['title' => 'permission_show'],
+            ['title' => 'permission_delete'],
+            ['title' => 'permission_access'],
+            ['title' => 'role_create'],
+            ['title' => 'role_edit'],
+            ['title' => 'role_show'],
+            ['title' => 'role_delete'],
+            ['title' => 'role_access'],
+            ['title' => 'user_create'],
+            ['title' => 'user_edit'],
+            ['title' => 'user_show'],
+            ['title' => 'user_delete'],
+            ['title' => 'user_access'],
         ];
 
         Permission::insert($permissions);

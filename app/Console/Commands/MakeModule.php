@@ -167,7 +167,6 @@ class MakeModule extends Command
             },
       ";
     }
-
     /**
      * Add module routes to vue router.
      *
@@ -179,6 +178,27 @@ class MakeModule extends Command
         fwrite($file, $fileContent);
         fclose($file);
     }
+    protected function getModuleApiRoutes(){
+        return"
+        Route::resource('users', 'UsersApiController');
+        
+        // {$this->ArgumentPlu}
+        Route::resource('{$this->argumentPlu}', '{$this->ArgumentPlu}ApiController');
+      ";
+    }
+    /**
+     * Add module Api routes to vue router.
+     *
+     */
+    protected function addApiRoutes(){
+        $fileContent = file_get_contents(base_path("routes/api.php"));
+        $fileContent = str_replace("Route::resource('users', 'UsersApiController');",$this->getModuleApiRoutes(), $fileContent);
+        $file = fopen(base_path("routes/api.php"), 'w+');
+        fwrite($file, $fileContent);
+        fclose($file);
+    }
+
+
 
     /**
      * Add module store requests to vuex store.
@@ -225,9 +245,6 @@ class MakeModule extends Command
      */
     protected function showOutput()
     {
-
-
         $this->info("Module {$this->Argument} created successfully!");
-
     }
 }
