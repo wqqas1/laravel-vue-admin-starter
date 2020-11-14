@@ -38,10 +38,10 @@ class MakeModule extends Command
      */
     public function handle()
     {
-        $this->ArgumentPlu = Str::plural(ucfirst($this->argument('name')));
-        $this->argumentPlu = Str::plural(strtolower($this->argument('name')));
-        $this->argument = strtolower($this->argument('name'));
-        $this->Argument = ucfirst($this->argument('name'));
+        $this->ArgumentPlu = Str::plural(Str::studly($this->argument('name')));
+        $this->argumentPlu = Str::plural(Str::snake($this->argument('name')));
+        $this->argument = Str::singular(Str::snake($this->argument('name')));
+        $this->Argument = Str::singular(Str::studly($this->argument('name')));
 
         foreach ($this->getFiles() as $file => $path) {
             $this->createStub($file, $path);
