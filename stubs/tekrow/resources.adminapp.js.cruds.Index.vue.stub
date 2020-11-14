@@ -87,7 +87,7 @@ export default {
       xprops: {
         module: '{{ DummyTextPlu }}Index',
         route: '{{ dummyTextPlu }}',
-        permission_prefix: '{{ dummyText }}_'
+        permission_prefix: '{{ dummy_text }}_'
       }
     }
   },
