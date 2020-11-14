@@ -42,7 +42,7 @@ class MakeModule extends Command
         $this->argumentPlu = Str::plural(Str::camel($this->argument('name')));
         $this->argument = Str::singular(Str::camel($this->argument('name')));
         $this->Argument = Str::singular(Str::studly($this->argument('name')));
-        /*
+
         foreach ($this->getFiles() as $file => $path) {
             $this->createStub($file, $path);
         }
@@ -51,7 +51,7 @@ class MakeModule extends Command
         $this->addApiRoutes();
         $this->addStore();
         $this->addSidebar();
-        */
+
         $this->showOutput();
         $this->call('make:migration', [
             'name' => 'create_' . Str::snake($this->argumentPlu) . '_table',
