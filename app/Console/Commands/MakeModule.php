@@ -41,6 +41,7 @@ class MakeModule extends Command
         $this->ArgumentPlu = Str::plural(Str::studly($this->argument('name')));
         $this->argumentPlu = Str::plural(Str::camel($this->argument('name')));
         $this->argument = Str::singular(Str::camel($this->argument('name')));
+        $this->argument_snake = Str::singular(Str::snake($this->argument('name')));
         $this->Argument = Str::singular(Str::studly($this->argument('name')));
 
         foreach ($this->getFiles() as $file => $path) {
@@ -54,8 +55,8 @@ class MakeModule extends Command
 
         $this->showOutput();
         $this->call('make:migration', [
-            'name' => 'create_' . Str::snake($this->argumentPlu) . '_table',
-            '--create' => Str::snake($this->argumentPlu)
+            'name' => 'create_' . $this->argument_snake . '_table',
+            '--create' => $this->argument_snake
         ]);
 
     }
@@ -99,8 +100,9 @@ class MakeModule extends Command
     {
         $fileContent = file_get_contents(base_path("stubs/tekrow/{$file}"));
         $stub = str_replace(
-            ['{{ DummyText }}', '{{ dummyText }}', '{{ DummyTextPlu }}', '{{ dummyTextPlu }}'],
+            ['{{ dummy_text }}', '{{ DummyText }}', '{{ dummyText }}', '{{ DummyTextPlu }}', '{{ dummyTextPlu }}'],
             [
+                $this->argument_snake,
                 $this->Argument,
                 $this->argument,
                 $this->ArgumentPlu,
@@ -136,7 +138,7 @@ class MakeModule extends Command
               title: '{$this->ArgumentPlu}',
               icon: 'table_view',
               path: { name: '{$this->argumentPlu}.index' },
-              gate: '{$this->argument}_access'
+              gate: '{$this->argument_snake}_access'
             },";
     }
     /**

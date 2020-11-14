@@ -11,7 +11,7 @@ class Store{{ DummyText }}Request extends FormRequest
 {
     public function authorize()
     {
-        return Gate::allows('{{ dummyText }}_create');
+        return Gate::allows('{{ dummy_text }}_create');
     }
 
     public function rules()

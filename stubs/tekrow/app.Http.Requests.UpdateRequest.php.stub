@@ -11,7 +11,7 @@ class Update{{ DummyText }}Request extends FormRequest
 {
     public function authorize()
     {
-        return Gate::allows('{{ dummyText }}_edit');
+        return Gate::allows('{{ dummy_text }}_edit');
     }
 
     public function rules()
