@@ -59,8 +59,8 @@ class MakeModule extends Command
 
         $this->createModulePermissions();
         $this->call('make:migration', [
-            'name' => 'create_' . $this->argument_snake . '_table',
-            '--create' => $this->argument_snake
+            'name' => 'create_' . $this->argument_plu . '_table',
+            '--create' => $this->argument_plu
         ]);
         $this->call('migrate');
         $this->showOutput();
