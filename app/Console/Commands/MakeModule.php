@@ -61,6 +61,7 @@ class MakeModule extends Command
             'name' => 'create_' . $this->argument_snake . '_table',
             '--create' => $this->argument_snake
         ]);
+        $this->call('migrate');
         $this->showOutput();
 
     }
