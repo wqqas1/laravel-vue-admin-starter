@@ -55,11 +55,13 @@ class MakeModule extends Command
         $this->addStore();
         $this->addSidebar();
 
-        $this->showOutput();
+
+        $this->createModulePermissions()
         $this->call('make:migration', [
             'name' => 'create_' . $this->argument_snake . '_table',
             '--create' => $this->argument_snake
         ]);
+        $this->showOutput();
 
     }
     /**
