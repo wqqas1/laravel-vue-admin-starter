@@ -20,7 +20,7 @@
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.name,
+                      'has-items': form.name,
                       'is-focused': activeField == 'name'
                     }"
                   >
@@ -28,8 +28,7 @@
                     <input
                       class="form-control"
                       type="text"
-                      :value="entry.name"
-                      @input="updateName"
+                      v-model="form.name"
                       @focus="focusField('name')"
                       @blur="clearFocus"
                       required
@@ -62,6 +61,7 @@ export default {
   data() {
     return {
       status: '',
+      form: {},
       activeField: ''
     }
   },
@@ -74,9 +74,10 @@ export default {
   watch: {
     '$route.params.id': {
       immediate: true,
-      handler() {
+      async handler() {
         this.resetState()
-        this.fetchEditData(this.$route.params.id)
+        await this.fetchEditData(this.$route.params.id)
+        this.form = Object.assign({},this.entry)
       }
     }
   },
@@ -85,12 +86,10 @@ export default {
       'fetchEditData',
       'updateData',
       'resetState',
-      'setName'
+      'setEntry'
     ]),
-    updateName(e) {
-      this.setName(e.target.value)
-    },
     submitForm() {
+      this.setEntry(this.form)
       this.updateData()
         .then(() => {
           this.$router.push({ name: '{{ dummyTextPlu }}.index' })
