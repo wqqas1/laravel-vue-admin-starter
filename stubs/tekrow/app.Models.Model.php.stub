@@ -11,7 +11,7 @@ class {{ DummyText }} extends Model
 {
     use HasAdvancedFilter, HasFactory;
 
-    public $table = '{{ dummyTextPlu }}';
+    public $table = '{{ dummy_text_plu }}';
 
     protected $dates = [
         'created_at',
