@@ -39,8 +39,8 @@ class MakeModule extends Command
     public function handle()
     {
         $this->ArgumentPlu = Str::plural(Str::studly($this->argument('name')));
-        $this->argumentPlu = Str::plural(Str::snake($this->argument('name')));
-        $this->argument = Str::singular(Str::snake($this->argument('name')));
+        $this->argumentPlu = Str::plural(Str::camel($this->argument('name')));
+        $this->argument = Str::singular(Str::camel($this->argument('name')));
         $this->Argument = Str::singular(Str::studly($this->argument('name')));
 
         foreach ($this->getFiles() as $file => $path) {
@@ -51,7 +51,9 @@ class MakeModule extends Command
         $this->addApiRoutes();
         $this->addStore();
         $this->addSidebar();
+
         $this->showOutput();
+
     }
 
     /**
@@ -139,33 +141,37 @@ class MakeModule extends Command
      * @return String
      */
     protected function getModuleRoutes(){
-        return"\n
-        children: [
-            {
-                path: '{$this->argumentPlu}',
-                name: '{$this->argumentPlu}.index',
-                component: () => import('@cruds/{$this->ArgumentPlu}/Index.vue'),
-                meta: { title: '{$this->ArgumentPlu}' }
-              },
-              {
-                path: '{$this->argumentPlu}/create',
-                name: '{$this->argumentPlu}.create',
-                component: () => import('@cruds/{$this->ArgumentPlu}/Create.vue'),
-                meta: { title: '{$this->ArgumentPlu}' }
-              },
-              {
-                path: '{$this->argumentPlu}/:id',
-                name: '{$this->argumentPlu}.show',
-                component: () => import('@cruds/{$this->ArgumentPlu}/Show.vue'),
-                meta: { title: '{$this->ArgumentPlu}' }
-              },
-              {
-                path: '{$this->argumentPlu}/:id/edit',
-                name: '{$this->argumentPlu}.edit',
-                component: () => import('@cruds/{$this->ArgumentPlu}/Edit.vue'),
-                meta: { title: '{$this->ArgumentPlu}' 
-              }
-            },
+        return"{
+        path: 'dashboard',
+        name: 'dashboard',
+        component: () => import('@pages/Dashboard.vue'),
+        meta: { title: 'Dashboard' }
+      },
+      {
+        path: '{$this->argumentPlu}',
+        name: '{$this->argumentPlu}.index',
+        component: () => import('@cruds/{$this->ArgumentPlu}/Index.vue'),
+        meta: { title: '{$this->ArgumentPlu}' }
+      },
+      {
+        path: '{$this->argumentPlu}/create',
+        name: '{$this->argumentPlu}.create',
+        component: () => import('@cruds/{$this->ArgumentPlu}/Create.vue'),
+        meta: { title: '{$this->ArgumentPlu}' }
+      },
+      {
+        path: '{$this->argumentPlu}/:id',
+        name: '{$this->argumentPlu}.show',
+        component: () => import('@cruds/{$this->ArgumentPlu}/Show.vue'),
+        meta: { title: '{$this->ArgumentPlu}' }
+      },
+      {
+        path: '{$this->argumentPlu}/:id/edit',
+        name: '{$this->argumentPlu}.edit',
+        component: () => import('@cruds/{$this->ArgumentPlu}/Edit.vue'),
+        meta: { title: '{$this->ArgumentPlu}' 
+      }
+    },            
       ";
     }
     /**
@@ -174,7 +180,12 @@ class MakeModule extends Command
      */
     protected function addRoutes(){
         $fileContent = file_get_contents(base_path("resources/adminapp/js/routes/routes.js"));
-        $fileContent = str_replace('children: [',$this->getModuleRoutes(), $fileContent);
+        $fileContent = str_replace("{
+        path: 'dashboard',
+        name: 'dashboard',
+        component: () => import('@pages/Dashboard.vue'),
+        meta: { title: 'Dashboard' }
+      },",$this->getModuleRoutes(), $fileContent);
         $file = fopen(base_path("resources/adminapp/js/routes/routes.js"), 'w+');
         fwrite($file, $fileContent);
         fclose($file);
