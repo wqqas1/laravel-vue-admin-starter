@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Role;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use App\Models\Permission;
 
 class MakeModule extends Command
 {
@@ -60,7 +62,22 @@ class MakeModule extends Command
         ]);
 
     }
-
+    /**
+     * Get file to stub.
+     *
+     * @return array
+     */
+    protected function createModulePermissions(){
+        Permission::insert([
+            ['title' =>$this->argument_snake . '_create'],
+            ['title' =>$this->argument_snake . '_edit'],
+            ['title' =>$this->argument_snake . '_show'],
+            ['title' =>$this->argument_snake . '_delete'],
+            ['title' =>$this->argument_snake . '_access'],
+        ]);
+        $superAdmin = Role::where('title','=','SuperAdmin')->first();
+        $superAdmin->permissions()->sync(Permission::all()->pluck('id'));
+    }
     /**
      * Get file to stub.
      *
