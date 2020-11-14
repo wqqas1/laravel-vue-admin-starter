@@ -48,6 +48,7 @@ class MakeModule extends Command
         }
 
         $this->addRoutes();
+        $this->addApiRoutes();
         $this->addStore();
         $this->addSidebar();
         $this->showOutput();
