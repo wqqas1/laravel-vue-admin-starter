@@ -11,16 +11,13 @@
               <h4 class="card-title">Edit Permission</h4>
             </div>
             <div class="card-body">
-              <back-button></back-button>
-            </div>
-            <div class="card-body">
               <bootstrap-alert />
               <div class="row">
                 <div class="col-md-12">
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.title,
+                      'has-items': form.title,
                       'is-focused': activeField == 'title'
                     }"
                   >
@@ -28,8 +25,7 @@
                     <input
                       class="form-control"
                       type="text"
-                      :value="entry.title"
-                      @input="updateTitle"
+                      v-model="form.title"
                       @focus="focusField('title')"
                       @blur="clearFocus"
                       required
@@ -59,9 +55,12 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  props: ['id'],
+  name: "EditPermission",
   data() {
     return {
       status: '',
+      form: {},
       activeField: ''
     }
   },
@@ -72,11 +71,14 @@ export default {
     this.resetState()
   },
   watch: {
-    '$route.params.id': {
+    id: {
       immediate: true,
-      handler() {
+      async handler(value) {
         this.resetState()
-        this.fetchEditData(this.$route.params.id)
+        if(value == null)
+          return
+        await this.fetchEditData(value)
+        this.form = _.cloneDeep(this.entry)
       }
     }
   },
@@ -85,19 +87,19 @@ export default {
       'fetchEditData',
       'updateData',
       'resetState',
-      'setTitle'
+      'setEntry'
     ]),
-    updateTitle(e) {
-      this.setTitle(e.target.value)
-    },
     submitForm() {
-      this.updateData()
+      const self = this;
+      self.setEntry(_.cloneDeep(self.form))
+      self.updateData()
         .then(() => {
-          this.$router.push({ name: 'permissions.index' })
-          this.$eventHub.$emit('update-success')
+          self.$eventHub.$emit('update-success')
+          self.$eventHub.$emit('PermissionsEditSuccess')
+          self.resetState()
         })
         .catch(error => {
-          this.status = 'failed'
+          self.status = 'failed'
           _.delay(() => {
             this.status = ''
           }, 3000)

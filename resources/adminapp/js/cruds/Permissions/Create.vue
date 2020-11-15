@@ -11,16 +11,13 @@
               <h4 class="card-title">Create Permission</h4>
             </div>
             <div class="card-body">
-              <back-button></back-button>
-            </div>
-            <div class="card-body">
               <bootstrap-alert />
               <div class="row">
                 <div class="col-md-12">
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.title,
+                      'has-items': form.title,
                       'is-focused': activeField == 'title'
                     }"
                   >
@@ -28,8 +25,7 @@
                     <input
                       class="form-control"
                       type="text"
-                      :value="entry.title"
-                      @input="updateTitle"
+                      v-model="form.title"
                       @focus="focusField('title')"
                       @blur="clearFocus"
                       required
@@ -59,28 +55,31 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  name: "CreatePermission",
   data() {
     return {
       status: '',
+      form: {},
       activeField: ''
     }
   },
   computed: {
     ...mapGetters('PermissionsSingle', ['entry', 'loading'])
   },
+  async mounted(){
+
+  },
   beforeDestroy() {
     this.resetState()
   },
   methods: {
-    ...mapActions('PermissionsSingle', ['storeData', 'resetState', 'setTitle']),
-    updateTitle(e) {
-      this.setTitle(e.target.value)
-    },
+    ...mapActions('PermissionsSingle', ['storeData', 'resetState', 'setEntry']),
     submitForm() {
+      this.setEntry(_.cloneDeep(this.form))
       this.storeData()
         .then(() => {
-          this.$router.push({ name: 'permissions.index' })
           this.$eventHub.$emit('create-success')
+          this.$eventHub.$emit('PermissionsCreateSuccess')
         })
         .catch(error => {
           this.status = 'failed'

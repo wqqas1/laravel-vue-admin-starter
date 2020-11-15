@@ -92,7 +92,7 @@ export default {
   },
   async mounted() {
     await this.fetchCreateData()
-    this.setEntry(_.cloneDeep(this.form))
+    this.form = _.cloneDeep(this.entry)
   },
   beforeDestroy() {
     this.resetState()

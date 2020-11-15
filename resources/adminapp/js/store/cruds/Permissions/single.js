@@ -4,8 +4,7 @@ function initialState() {
       id: null,
       title: '',
       created_at: '',
-      updated_at: '',
-      deleted_at: ''
+      updated_at: ''
     },
     loading: false
   }
@@ -83,20 +82,11 @@ const actions = {
         })
     })
   },
-  setTitle({ commit }, value) {
-    commit('setTitle', value)
+  setEntry({ commit }, value) {
+    commit('setEntry', value)
   },
-  setCreatedAt({ commit }, value) {
-    commit('setCreatedAt', value)
-  },
-  setUpdatedAt({ commit }, value) {
-    commit('setUpdatedAt', value)
-  },
-  setDeletedAt({ commit }, value) {
-    commit('setDeletedAt', value)
-  },
-  fetchEditData({ commit, dispatch }, id) {
-    axios.get(`${route}/${id}/edit`).then(response => {
+  async fetchEditData({ commit, dispatch }, id) {
+    await axios.get(`${route}/${id}/edit`).then(response => {
       commit('setEntry', response.data.data)
     })
   },
@@ -113,18 +103,6 @@ const actions = {
 const mutations = {
   setEntry(state, entry) {
     state.entry = entry
-  },
-  setTitle(state, value) {
-    state.entry.title = value
-  },
-  setCreatedAt(state, value) {
-    state.entry.created_at = value
-  },
-  setUpdatedAt(state, value) {
-    state.entry.updated_at = value
-  },
-  setDeletedAt(state, value) {
-    state.entry.deleted_at = value
   },
   setLoading(state, loading) {
     state.loading = loading
