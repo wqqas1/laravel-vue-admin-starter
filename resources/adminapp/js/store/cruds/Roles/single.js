@@ -5,8 +5,7 @@ function initialState() {
       title: '',
       permissions: [],
       created_at: '',
-      updated_at: '',
-      deleted_at: ''
+      updated_at: ''
     },
     lists: {
       permissions: []
@@ -88,28 +87,16 @@ const actions = {
         })
     })
   },
-  setTitle({ commit }, value) {
-    commit('setTitle', value)
+  setEntry({ commit }, value) {
+    commit('setEntry', value)
   },
-  setPermissions({ commit }, value) {
-    commit('setPermissions', value)
-  },
-  setCreatedAt({ commit }, value) {
-    commit('setCreatedAt', value)
-  },
-  setUpdatedAt({ commit }, value) {
-    commit('setUpdatedAt', value)
-  },
-  setDeletedAt({ commit }, value) {
-    commit('setDeletedAt', value)
-  },
-  fetchCreateData({ commit }) {
-    axios.get(`${route}/create`).then(response => {
+  async fetchCreateData({ commit }) {
+    await axios.get(`${route}/create`).then(response => {
       commit('setLists', response.data.meta)
     })
   },
-  fetchEditData({ commit, dispatch }, id) {
-    axios.get(`${route}/${id}/edit`).then(response => {
+  async fetchEditData({ commit, dispatch }, id) {
+    await axios.get(`${route}/${id}/edit`).then(response => {
       commit('setEntry', response.data.data)
       commit('setLists', response.data.meta)
     })
@@ -127,21 +114,6 @@ const actions = {
 const mutations = {
   setEntry(state, entry) {
     state.entry = entry
-  },
-  setTitle(state, value) {
-    state.entry.title = value
-  },
-  setPermissions(state, value) {
-    state.entry.permissions = value
-  },
-  setCreatedAt(state, value) {
-    state.entry.created_at = value
-  },
-  setUpdatedAt(state, value) {
-    state.entry.updated_at = value
-  },
-  setDeletedAt(state, value) {
-    state.entry.deleted_at = value
   },
   setLists(state, lists) {
     state.lists = lists

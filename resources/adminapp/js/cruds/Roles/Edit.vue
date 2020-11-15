@@ -11,16 +11,13 @@
               <h4 class="card-title">Edit Role</h4>
             </div>
             <div class="card-body">
-              <back-button></back-button>
-            </div>
-            <div class="card-body">
               <bootstrap-alert />
               <div class="row">
                 <div class="col-md-12">
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.title,
+                      'has-items': form.title,
                       'is-focused': activeField == 'title'
                     }"
                   >
@@ -28,8 +25,7 @@
                     <input
                       class="form-control"
                       type="text"
-                      :value="entry.title"
-                      @input="updateTitle"
+                      v-model="form.title"
                       @focus="focusField('title')"
                       @blur="clearFocus"
                       required
@@ -38,7 +34,7 @@
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.permissions.length !== 0,
+                      'has-items': form.permissions.length !== 0,
                       'is-focused': activeField == 'permissions'
                     }"
                   >
@@ -49,11 +45,10 @@
                       name="permissions"
                       label="title"
                       :key="'permissions-field'"
-                      :value="entry.permissions"
+                      v-model="form.permissions"
                       :options="lists.permissions"
                       :closeOnSelect="false"
                       multiple
-                      @input="updatePermissions"
                       @search.focus="focusField('permissions')"
                       @search.blur="clearFocus"
                     />
@@ -82,9 +77,14 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  props: ['id'],
+  name: "EditRole",
   data() {
     return {
       status: '',
+      form: {
+        permissions:[]
+      },
       activeField: ''
     }
   },
@@ -95,11 +95,14 @@ export default {
     this.resetState()
   },
   watch: {
-    '$route.params.id': {
+    id: {
       immediate: true,
-      handler() {
+      async handler(value) {
         this.resetState()
-        this.fetchEditData(this.$route.params.id)
+        if(value == null)
+          return
+        await this.fetchEditData(value)
+        this.form = _.cloneDeep(this.entry)
       }
     }
   },
@@ -108,20 +111,16 @@ export default {
       'fetchEditData',
       'updateData',
       'resetState',
-      'setTitle',
-      'setPermissions'
+      'setEntry'
     ]),
-    updateTitle(e) {
-      this.setTitle(e.target.value)
-    },
-    updatePermissions(value) {
-      this.setPermissions(value)
-    },
     submitForm() {
+      const self = this;
+      this.setEntry(_.cloneDeep(this.form))
       this.updateData()
         .then(() => {
-          this.$router.push({ name: 'roles.index' })
-          this.$eventHub.$emit('update-success')
+          self.$eventHub.$emit('update-success')
+          this.$eventHub.$emit('RolesEditSuccess')
+          self.resetState()
         })
         .catch(error => {
           this.status = 'failed'

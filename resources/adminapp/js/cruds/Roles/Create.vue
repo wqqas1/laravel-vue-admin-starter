@@ -11,16 +11,13 @@
               <h4 class="card-title">Create Role</h4>
             </div>
             <div class="card-body">
-              <back-button></back-button>
-            </div>
-            <div class="card-body">
               <bootstrap-alert />
               <div class="row">
                 <div class="col-md-12">
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.title,
+                      'has-items': form.title,
                       'is-focused': activeField == 'title'
                     }"
                   >
@@ -28,8 +25,7 @@
                     <input
                       class="form-control"
                       type="text"
-                      :value="entry.title"
-                      @input="updateTitle"
+                      v-model="form.title"
                       @focus="focusField('title')"
                       @blur="clearFocus"
                       required
@@ -38,7 +34,7 @@
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.permissions.length !== 0,
+                      'has-items': form.permissions.length !== 0,
                       'is-focused': activeField == 'permissions'
                     }"
                   >
@@ -49,11 +45,10 @@
                       name="permissions"
                       label="title"
                       :key="'permissions-field'"
-                      :value="entry.permissions"
+                      v-model="form.permissions"
                       :options="lists.permissions"
                       :closeOnSelect="false"
                       multiple
-                      @input="updatePermissions"
                       @search.focus="focusField('permissions')"
                       @search.blur="clearFocus"
                     />
@@ -82,17 +77,22 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  name: "CreateRole",
   data() {
     return {
       status: '',
+      form:{
+        permissions: []
+      },
       activeField: ''
     }
   },
   computed: {
     ...mapGetters('RolesSingle', ['entry', 'loading', 'lists'])
   },
-  mounted() {
-    this.fetchCreateData()
+  async mounted() {
+    await this.fetchCreateData()
+    this.setEntry(_.cloneDeep(this.form))
   },
   beforeDestroy() {
     this.resetState()
@@ -101,21 +101,15 @@ export default {
     ...mapActions('RolesSingle', [
       'storeData',
       'resetState',
-      'setTitle',
-      'setPermissions',
+      'setEntry',
       'fetchCreateData'
     ]),
-    updateTitle(e) {
-      this.setTitle(e.target.value)
-    },
-    updatePermissions(value) {
-      this.setPermissions(value)
-    },
     submitForm() {
+      this.setEntry(_.cloneDeep(this.form))
       this.storeData()
         .then(() => {
-          this.$router.push({ name: 'roles.index' })
           this.$eventHub.$emit('create-success')
+          this.$eventHub.$emit('RolesCreateSuccess')
         })
         .catch(error => {
           this.status = 'failed'

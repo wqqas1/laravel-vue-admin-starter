@@ -97,10 +97,6 @@ export default {
   data() {
     return {
       editId: null,
-      modals:{
-        create: false,
-        edit: false
-      },
       columns: [
         { title: 'ID', field: 'id', sortable: true, colStyle: 'width: 50px;' },
         { title: 'Name', field: 'name', thComp: thFilter, sortable: true },
