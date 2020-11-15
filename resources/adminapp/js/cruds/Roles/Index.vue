@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="modal fade" id="createMedicineBrand" tabindex="-1" role="dialog">
+    <div class="modal fade" id="createRole" tabindex="-1" role="dialog">
       <div class="modal-dialog">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <div class="modal-content">
@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <div class="modal fade" id="editMedicineBrand" tabindex="-1" role="dialog">
+    <div class="modal fade" id="editRole" tabindex="-1" role="dialog">
       <div class="modal-dialog">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <div class="modal-content">
@@ -89,6 +89,7 @@ import CreateRole from './Create'
 import EditRole from './Edit'
 import DatatableActions from '@components/Datatables/DatatableActions'
 import DatatableList from '@components/Datatables/DatatableList'
+import thFilter from '@components/Datatables/thFilter'
 
 export default {
   components:{
