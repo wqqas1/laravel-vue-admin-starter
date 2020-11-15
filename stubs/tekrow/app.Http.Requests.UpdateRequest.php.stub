@@ -16,11 +16,8 @@ class Update{{ DummyText }}Request extends FormRequest
 
     public function rules()
     {
-        return [
-            'name' => [
-                'string',
-                'required',
-            ],
-        ];
+        $rules = {{ DummyText }}::$rules;
+                $rules['name'] = $rules['name'] . ',name,' . $this->id;
+                return $rules;
     }
 }

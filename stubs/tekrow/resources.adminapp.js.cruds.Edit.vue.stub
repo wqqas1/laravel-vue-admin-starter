@@ -11,9 +11,6 @@
               <h4 class="card-title">Edit {{ DummyText }}</h4>
             </div>
             <div class="card-body">
-              <back-button></back-button>
-            </div>
-            <div class="card-body">
               <bootstrap-alert />
               <div class="row">
                 <div class="col-md-12">
@@ -58,6 +55,8 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  props: ['id'],
+  name: "Edit{{ DummyText }}",
   data() {
     return {
       status: '',
@@ -72,10 +71,12 @@ export default {
     this.resetState()
   },
   watch: {
-    '$route.params.id': {
+    id: {
       immediate: true,
       async handler() {
         this.resetState()
+        if(value == null)
+          return
         await this.fetchEditData(this.$route.params.id)
         this.form = Object.assign({},this.entry)
       }
@@ -89,11 +90,11 @@ export default {
       'setEntry'
     ]),
     submitForm() {
-      this.setEntry(this.form)
+      this.setEntry(Object.assign({},this.form))
       this.updateData()
         .then(() => {
-          this.$router.push({ name: '{{ dummyTextPlu }}.index' })
           this.$eventHub.$emit('update-success')
+          this.$eventHub.$emit('{{ dummyTextPlu }}Success')
         })
         .catch(error => {
           this.status = 'failed'

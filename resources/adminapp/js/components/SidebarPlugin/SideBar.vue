@@ -45,7 +45,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Vue Starter'
+      default: 'HMS'
     },
     backgroundImage: {
       type: String,

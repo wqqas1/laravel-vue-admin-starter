@@ -11,16 +11,13 @@
               <h4 class="card-title">Create User</h4>
             </div>
             <div class="card-body">
-              <back-button></back-button>
-            </div>
-            <div class="card-body">
               <bootstrap-alert />
               <div class="row">
                 <div class="col-md-12">
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.name,
+                      'has-items': form.name,
                       'is-focused': activeField == 'name'
                     }"
                   >
@@ -28,8 +25,7 @@
                     <input
                       class="form-control"
                       type="text"
-                      :value="entry.name"
-                      @input="updateName"
+                      v-model="form.name"
                       @focus="focusField('name')"
                       @blur="clearFocus"
                       required
@@ -38,7 +34,7 @@
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.email,
+                      'has-items': form.email,
                       'is-focused': activeField == 'email'
                     }"
                   >
@@ -46,8 +42,7 @@
                     <input
                       class="form-control"
                       type="email"
-                      :value="entry.email"
-                      @input="updateEmail"
+                      v-model="form.email"
                       @focus="focusField('email')"
                       @blur="clearFocus"
                       required
@@ -56,7 +51,7 @@
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.password,
+                      'has-items': form.password,
                       'is-focused': activeField == 'password'
                     }"
                   >
@@ -64,8 +59,7 @@
                     <input
                       class="form-control"
                       type="password"
-                      :value="entry.password"
-                      @input="updatePassword"
+                      v-model="form.password"
                       @focus="focusField('password')"
                       @blur="clearFocus"
                     />
@@ -73,7 +67,7 @@
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.roles.length !== 0,
+                      'has-items': form.roles.length !== 0,
                       'is-focused': activeField == 'roles'
                     }"
                   >
@@ -82,11 +76,10 @@
                       name="roles"
                       label="title"
                       :key="'roles-field'"
-                      :value="entry.roles"
+                      v-model="form.roles"
                       :options="lists.roles"
                       :closeOnSelect="false"
                       multiple
-                      @input="updateRoles"
                       @search.focus="focusField('roles')"
                       @search.blur="clearFocus"
                     />
@@ -96,7 +89,7 @@
                     <attachment
                         :route="getRoute('users')"
                         :collection-name="'user_photo'"
-                        :media="entry.photo"
+                        :media="form.photo"
                         :max-file-size="2"
                         :component="'pictures'"
                         :accept="'image/*'"
@@ -130,20 +123,26 @@ import { mapGetters, mapActions } from 'vuex'
 import Attachment from '@components/Attachments/Attachment'
 
 export default {
+  name: 'CreateUser',
   components: {
     Attachment
   },
   data() {
     return {
       status: '',
+      form: {
+        roles: [],
+        photo: []
+      },
       activeField: ''
     }
   },
   computed: {
     ...mapGetters('UsersSingle', ['entry', 'loading', 'lists'])
   },
-  mounted() {
-    this.fetchCreateData()
+  async mounted() {
+    await this.fetchCreateData()
+    this.form = _.cloneDeep(this.entry)
   },
   beforeDestroy() {
     this.resetState()
@@ -152,34 +151,26 @@ export default {
     ...mapActions('UsersSingle', [
       'storeData',
       'resetState',
-      'setName',
-      'setEmail',
-      'setPassword',
-      'setRoles',
-      'insertPhotoFile',
-      'removePhotoFile',
+      'setEntry',
       'fetchCreateData'
     ]),
-    updateName(e) {
-      this.setName(e.target.value)
+    insertPhotoFile(file) {
+      this.form.photo.push(file)
     },
-    updateEmail(e) {
-      this.setEmail(e.target.value)
-    },
-    updatePassword(e) {
-      this.setPassword(e.target.value)
-    },
-    updateRoles(value) {
-      this.setRoles(value)
+    removePhotoFile(file) {
+      this.form.photo = this.form.photo.filter(item => {
+        return item.id !== file.id
+      })
     },
     getRoute(name) {
       return `${axios.defaults.baseURL}${name}/media`
     },
     submitForm() {
+      this.setEntry(_.cloneDeep(this.form))
       this.storeData()
         .then(() => {
-          this.$router.push({ name: 'users.index' })
           this.$eventHub.$emit('create-success')
+          this.$eventHub.$emit('UsersCreateSuccess')
         })
         .catch(error => {
           this.status = 'failed'

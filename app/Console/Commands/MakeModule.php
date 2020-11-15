@@ -43,8 +43,10 @@ class MakeModule extends Command
         $this->ArgumentPlu = Str::plural(Str::studly($this->argument('name')));
         $this->argumentPlu = Str::plural(Str::camel($this->argument('name')));
         $this->argument_plu = Str::plural(Str::snake($this->argument('name')));
+        $this->argumentKebabPlu = Str::plural(Str::kebab($this->argument('name')));
         $this->argument = Str::singular(Str::camel($this->argument('name')));
         $this->argument_snake = Str::singular(Str::snake($this->argument('name')));
+        $this->argument_kebab = Str::singular(Str::kebab($this->argument('name')));
         $this->Argument = Str::singular(Str::studly($this->argument('name')));
 
         foreach ($this->getFiles() as $file => $path) {
@@ -121,8 +123,9 @@ class MakeModule extends Command
     {
         $fileContent = file_get_contents(base_path("stubs/tekrow/{$file}"));
         $stub = str_replace(
-            ['{{ dummy_text_plu }}', '{{ dummy_text }}', '{{ DummyText }}', '{{ dummyText }}', '{{ DummyTextPlu }}', '{{ dummyTextPlu }}'],
+            ['{{ dummy-text-plu }}','{{ dummy-text }}','{{ dummy_text_plu }}', '{{ dummy_text }}', '{{ DummyText }}', '{{ dummyText }}', '{{ DummyTextPlu }}', '{{ dummyTextPlu }}'],
             [
+                $this->argumentKebabPlu,
                 $this->argument_plu,
                 $this->argument_snake,
                 $this->Argument,

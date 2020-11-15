@@ -93,46 +93,16 @@ const actions = {
         })
     })
   },
-  setName({ commit }, value) {
-    commit('setName', value)
+  setEntry({ commit }, value) {
+    commit('setEntry', value)
   },
-  setEmail({ commit }, value) {
-    commit('setEmail', value)
-  },
-  setEmailVerifiedAt({ commit }, value) {
-    commit('setEmailVerifiedAt', value)
-  },
-  setPassword({ commit }, value) {
-    commit('setPassword', value)
-  },
-  setRoles({ commit }, value) {
-    commit('setRoles', value)
-  },
-  setRememberToken({ commit }, value) {
-    commit('setRememberToken', value)
-  },
-  insertPhotoFile({ commit }, file) {
-    commit('insertPhotoFile', file)
-  },
-  removePhotoFile({ commit }, file) {
-    commit('removePhotoFile', file)
-  },
-  setCreatedAt({ commit }, value) {
-    commit('setCreatedAt', value)
-  },
-  setUpdatedAt({ commit }, value) {
-    commit('setUpdatedAt', value)
-  },
-  setDeletedAt({ commit }, value) {
-    commit('setDeletedAt', value)
-  },
-  fetchCreateData({ commit }) {
-    axios.get(`${route}/create`).then(response => {
+  async fetchCreateData({ commit }) {
+    await axios.get(`${route}/create`).then(response => {
       commit('setLists', response.data.meta)
     })
   },
-  fetchEditData({ commit, dispatch }, id) {
-    axios.get(`${route}/${id}/edit`).then(response => {
+  async fetchEditData({ commit, dispatch }, id) {
+    await axios.get(`${route}/${id}/edit`).then(response => {
       commit('setEntry', response.data.data)
       commit('setLists', response.data.meta)
     })
@@ -151,33 +121,6 @@ const mutations = {
   setEntry(state, entry) {
     state.entry = entry
   },
-  setName(state, value) {
-    state.entry.name = value
-  },
-  setEmail(state, value) {
-    state.entry.email = value
-  },
-  setEmailVerifiedAt(state, value) {
-    state.entry.email_verified_at = value
-  },
-  setPassword(state, value) {
-    state.entry.password = value
-  },
-  setRoles(state, value) {
-    state.entry.roles = value
-  },
-  setRememberToken(state, value) {
-    state.entry.remember_token = value
-  },
-  setCreatedAt(state, value) {
-    state.entry.created_at = value
-  },
-  setUpdatedAt(state, value) {
-    state.entry.updated_at = value
-  },
-  setDeletedAt(state, value) {
-    state.entry.deleted_at = value
-  },
   setLists(state, lists) {
     state.lists = lists
   },
@@ -186,15 +129,7 @@ const mutations = {
   },
   resetState(state) {
     state = Object.assign(state, initialState())
-  },
-  insertPhotoFile(state, file) {
-    state.entry.photo.push(file)
-  },
-  removePhotoFile(state, file) {
-    state.entry.photo = state.entry.photo.filter(item => {
-      return item.id !== file.id
-    })
-  },
+  }
 }
 
 export default {

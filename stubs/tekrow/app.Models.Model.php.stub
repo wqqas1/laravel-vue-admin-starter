@@ -23,6 +23,23 @@ class {{ DummyText }} extends Model
         'created_at',
         'updated_at',
     ];
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id'    => 'integer',
+        'name'  => 'string'
+    ];
+    /**
+     * Validation rules
+     *
+     * @var array
+     */
+    public static $rules = [
+        'name'  => 'required|unique:{{ dummy_text_plu }}'
+    ];
 
     public $filterable = [
             'name'

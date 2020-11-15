@@ -11,16 +11,13 @@
               <h4 class="card-title">Edit User</h4>
             </div>
             <div class="card-body">
-              <back-button></back-button>
-            </div>
-            <div class="card-body">
               <bootstrap-alert />
               <div class="row">
                 <div class="col-md-12">
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.name,
+                      'has-items': form.name,
                       'is-focused': activeField == 'name'
                     }"
                   >
@@ -28,8 +25,7 @@
                     <input
                       class="form-control"
                       type="text"
-                      :value="entry.name"
-                      @input="updateName"
+                      v-model="form.name"
                       @focus="focusField('name')"
                       @blur="clearFocus"
                       required
@@ -38,7 +34,7 @@
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.email,
+                      'has-items': form.email,
                       'is-focused': activeField == 'email'
                     }"
                   >
@@ -46,8 +42,7 @@
                     <input
                       class="form-control"
                       type="text"
-                      :value="entry.email"
-                      @input="updateEmail"
+                      v-model="form.email"
                       @focus="focusField('email')"
                       @blur="clearFocus"
                       required
@@ -56,7 +51,7 @@
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.password,
+                      'has-items': form.password,
                       'is-focused': activeField == 'password'
                     }"
                   >
@@ -64,8 +59,7 @@
                     <input
                       class="form-control"
                       type="password"
-                      :value="entry.password"
-                      @input="updatePassword"
+                      v-model="form.password"
                       @focus="focusField('password')"
                       @blur="clearFocus"
                     />
@@ -73,7 +67,7 @@
                   <div
                     class="form-group bmd-form-group"
                     :class="{
-                      'has-items': entry.roles.length !== 0,
+                      'has-items': form.roles.length !== 0,
                       'is-focused': activeField == 'roles'
                     }"
                   >
@@ -82,11 +76,10 @@
                       name="roles"
                       label="title"
                       :key="'roles-field'"
-                      :value="entry.roles"
+                      v-model="form.roles"
                       :options="lists.roles"
                       :closeOnSelect="false"
                       multiple
-                      @input="updateRoles"
                       @search.focus="focusField('roles')"
                       @search.blur="clearFocus"
                     />
@@ -96,8 +89,8 @@
                     <attachment
                         :route="getRoute('users')"
                         :collection-name="'user_photo'"
-                        :media="entry.photo"
-                        :model-id="$route.params.id"
+                        :media="form.photo"
+                        :model-id="form.id"
                         :max-file-size="2"
                         :component="'pictures'"
                         :accept="'image/*'"
@@ -131,12 +124,18 @@ import { mapGetters, mapActions } from 'vuex'
 import Attachment from '@components/Attachments/Attachment'
 
 export default {
+  props: ['id'],
+  name: 'EditUser',
   components: {
     Attachment
   },
   data() {
     return {
       status: '',
+      form: {
+        roles: [],
+        photo: []
+      },
       activeField: ''
     }
   },
@@ -147,11 +146,14 @@ export default {
     this.resetState()
   },
   watch: {
-    '$route.params.id': {
+    id: {
       immediate: true,
-      handler() {
+      async handler(value) {
         this.resetState()
-        this.fetchEditData(this.$route.params.id)
+        if(value == null)
+          return
+        await this.fetchEditData(value)
+        this.form = _.cloneDeep(this.entry)
       }
     }
   },
@@ -160,33 +162,27 @@ export default {
       'fetchEditData',
       'updateData',
       'resetState',
-      'setName',
-      'setEmail',
-      'setPassword',
-      'setRoles',
-      'insertPhotoFile',
-      'removePhotoFile'
+      'setEntry'
     ]),
-    updateName(e) {
-      this.setName(e.target.value)
+    insertPhotoFile(file) {
+      this.form.photo.push(file)
+      this.setEntry(_.cloneDeep(this.form))
     },
-    updateEmail(e) {
-      this.setEmail(e.target.value)
-    },
-    updatePassword(e) {
-      this.setPassword(e.target.value)
-    },
-    updateRoles(value) {
-      this.setRoles(value)
+    removePhotoFile( file) {
+      this.form.photo = this.form.photo.filter(item => {
+        return item.id !== file.id
+      })
+      this.setEntry(_.cloneDeep(this.form))
     },
     getRoute(name) {
       return `${axios.defaults.baseURL}${name}/media`
     },
     submitForm() {
+      this.setEntry(_.cloneDeep(this.form))
       this.updateData()
         .then(() => {
-          this.$router.push({ name: 'users.index' })
           this.$eventHub.$emit('update-success')
+          this.$eventHub.$emit('UsersEditSuccess')
         })
         .catch(error => {
           this.status = 'failed'

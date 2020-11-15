@@ -252,6 +252,13 @@ export default {
     }
   },
   watch: {
+    modelId: {
+      handler: function (value) {
+        if(value > 0)
+          this.options.params.model_id = value
+      },
+      deep: true
+    },
     tmpAttachments: {
       handler: function () {
         this.hasFiles = this.media.length + this.tmpAttachments.length

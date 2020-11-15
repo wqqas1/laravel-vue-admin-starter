@@ -16,11 +16,6 @@ class Store{{ DummyText }}Request extends FormRequest
 
     public function rules()
     {
-        return [
-            'name' => [
-                'string',
-                'required',
-            ],
-        ];
+        return return {{ DummyText }}::$rules;
     }
 }

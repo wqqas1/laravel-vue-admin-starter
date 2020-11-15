@@ -1,4 +1,26 @@
 <template>
+  <section>
+    <div class="modal fade" id="create{{ DummyText }}" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <div class="modal-content">
+          <div class="modal-body">
+            <create-{{ dummy-text }}></create-{{ dummy-text }}>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="editMedicineBrand" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <div class="modal-content">
+          <div class="modal-body">
+            <edit-{{ dummy-text }} :id="editId" :edit_success="editSuccess"></edit-{{ dummy-text }}>
+          </div>
+        </div>
+      </div>
+    </div>
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
@@ -7,19 +29,19 @@
             <div class="card-icon">
               <i class="material-icons">assignment</i>
             </div>
-            <h4 class="card-title">{{ DummyTextPlu }} Table</h4>
+            <h4 class="card-title">{{ DummyTextPlu }}</h4>
           </div>
           <div class="card-body">
-            <router-link
+            <button
               class="btn btn-primary"
               v-if="$can(xprops.permission_prefix + 'create')"
-              :to="{ name: xprops.route + '.create' }"
+              @click="showCreate"
             >
               <i class="material-icons">
                 add
               </i>
               Add new
-            </router-link>
+            </button>
             <button
               type="button"
               class="btn btn-default"
@@ -62,18 +84,26 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Create{{ DummyText }} from './Create'
+import Edit{{ DummyText }} from './Edit'
 import DatatableActions from '@components/Datatables/DatatableActions'
-import DatatableSingle from '@components/Datatables/DatatableSingle'
-import DatatableList from '@components/Datatables/DatatableList'
-import DatatableCheckbox from '@components/Datatables/DatatableCheckbox'
-import DatatableEnum from '@components/Datatables/DatatableEnum'
+import thFilter from '@components/Datatables/thFilter'
 
 export default {
+  components:{
+    Create{{ DummyText }},
+    Edit{{ DummyText }}
+  },
   data() {
     return {
+      editId: null,
+      modals:{
+        create: false,
+        edit: false
+      },
       columns: [
         { title: 'ID', field: 'id', sortable: true, colStyle: 'width: 50px;' },
-        { title: 'Name', field: 'name', sortable: true },
+        { title: 'Name', field: 'name', thComp: thFilter, sortable: true },
         {
           title: 'Actions',
           tdComp: DatatableActions,
@@ -108,7 +138,42 @@ export default {
     }
   },
   methods: {
-    ...mapActions('{{ DummyTextPlu }}Index', ['fetchIndexData', 'setQuery', 'resetState'])
+    ...mapActions('{{ DummyTextPlu }}Index', ['fetchIndexData', 'destroyData', 'setQuery', 'resetState']),
+    showCreate(){
+      $('#create{{ DummyText }}').modal('show')
+    },
+    createSuccess(){
+      $('#create{{ DummyText }}').modal('hide')
+      this.fetchIndexData()
+    },
+    showEdit(id){
+      this.editId = id
+      $('#edit{{ DummyText }}').modal('show')
+    },
+    editSuccess(){
+      $('#edit{{ DummyText }}').modal('hide')
+      this.fetchIndexData()
+    },
+    deleteData(id) {
+      const self = this
+      this.$swal({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Delete',
+        confirmButtonColor: '#dd4b39',
+        focusCancel: true,
+        reverseButtons: true
+      }).then(async result => {
+        if (result.value) {
+          await self.destroyData(id)
+            .then(result => {
+              self.$eventHub.$emit('delete-success')
+            })
+        }
+      })
+    }
   }
 }
 </script>

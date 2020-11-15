@@ -8,23 +8,21 @@
       <i class="material-icons">remove_red_eye</i>
     </router-link>
 
-    <router-link
+    <button
       class="btn btn-just-icon btn-round btn-link text-success"
       v-if="$can(xprops.permission_prefix + 'edit')"
-      :to="{ name: xprops.route + '.edit', params: { id: row.id } }"
+      @click="emitEdit(row.id)"
     >
       <i class="material-icons">edit</i>
-    </router-link>
+    </button>
 
-    <a
-      href="#"
+    <button
       class="btn btn-just-icon btn-round btn-link text-rose"
       v-if="$can(xprops.permission_prefix + 'delete')"
-      @click.prevent="destroyData(row.id)"
-      type="button"
+      @click.prevent="emitDelete(row.id)"
     >
       <i class="material-icons">delete</i>
-    </a>
+    </button>
   </div>
 </template>
 
@@ -40,25 +38,11 @@ export default {
     // Code...
   },
   methods: {
-    destroyData(id) {
-      this.$swal({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Delete',
-        confirmButtonColor: '#dd4b39',
-        focusCancel: true,
-        reverseButtons: true
-      }).then(result => {
-        if (result.value) {
-          this.$store
-            .dispatch(this.xprops.module + '/destroyData', id)
-            .then(result => {
-              this.$eventHub.$emit('delete-success')
-            })
-        }
-      })
+    emitDelete(id){
+      this.$eventHub.$emit(this.xprops.module + 'Delete', id)
+    },
+    emitEdit(id){
+      this.$eventHub.$emit(this.xprops.module + 'Edit', id)
     }
   }
 }

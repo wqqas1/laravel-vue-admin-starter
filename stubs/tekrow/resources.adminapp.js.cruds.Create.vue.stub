@@ -1,63 +1,59 @@
 <template>
-  <div class="container-fluid">
-    <form @submit.prevent="submitForm">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header card-header-primary card-header-icon">
-              <div class="card-icon">
-                <i class="material-icons">add</i>
-              </div>
-              <h4 class="card-title">Create {{ DummyText }}</h4>
+  <form @submit.prevent="submitForm">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-primary card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">add</i>
             </div>
-            <div class="card-body">
-              <back-button></back-button>
-            </div>
-            <div class="card-body">
-              <bootstrap-alert />
-              <div class="row">
-                <div class="col-md-12">
-                  <div
-                    class="form-group bmd-form-group"
-                    :class="{
-                      'has-items': form.name,
-                      'is-focused': activeField == 'name'
-                    }"
-                  >
-                    <label class="bmd-label-floating required">Name</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="form.name"
-                      @focus="focusField('name')"
-                      @blur="clearFocus"
-                      required
-                    />
-                  </div>
+            <h4 class="card-title">Create {{ DummyText }}</h4>
+          </div>
+          <div class="card-body">
+            <bootstrap-alert />
+            <div class="row">
+              <div class="col-md-12">
+                <div
+                  class="form-group bmd-form-group"
+                  :class="{
+                    'has-items': form.name,
+                    'is-focused': activeField == 'name'
+                  }"
+                >
+                  <label class="bmd-label-floating required">Name</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    v-model="form.name"
+                    @focus="focusField('name')"
+                    @blur="clearFocus"
+                    required
+                  />
                 </div>
               </div>
             </div>
-            <div class="card-footer">
-              <vue-button-spinner
-                class="btn-primary"
-                :status="status"
-                :isLoading="loading"
-                :disabled="loading"
-              >
-                Save
-              </vue-button-spinner>
-            </div>
+          </div>
+          <div class="card-footer">
+            <vue-button-spinner
+              class="btn-primary"
+              :status="status"
+              :isLoading="loading"
+              :disabled="loading"
+            >
+              Save
+            </vue-button-spinner>
           </div>
         </div>
       </div>
-    </form>
-  </div>
+    </div>
+  </form>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  name: "Create{{ DummyText }}",
   data() {
     return {
       status: '',
@@ -68,6 +64,9 @@ export default {
   computed: {
     ...mapGetters('{{ DummyTextPlu }}Single', ['entry', 'loading'])
   },
+  async mounted(){
+
+  },
   beforeDestroy() {
     this.resetState()
   },
@@ -75,11 +74,11 @@ export default {
     ...mapActions('{{ DummyTextPlu }}Single', ['storeData', 'resetState', 'setEntry']),
 
     submitForm() {
-      this.setEntry(this.form)
+      this.setEntry(Object.assign({},this.form))
       this.storeData()
         .then(() => {
-          this.$router.push({ name: '{{ dummyTextPlu }}.index' })
           this.$eventHub.$emit('create-success')
+          this.$eventHub.$emit('{{ DummyTextPlu }}CreateSuccess')
         })
         .catch(error => {
           this.status = 'failed'
