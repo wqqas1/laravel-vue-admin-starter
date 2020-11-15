@@ -78,7 +78,7 @@ export default {
         if(value == null)
           return
         await this.fetchEditData(this.$route.params.id)
-        this.form = Object.assign({},this.entry)
+        this.form = _.cloneDeep(this.entry)
       }
     }
   },
@@ -90,7 +90,7 @@ export default {
       'setEntry'
     ]),
     submitForm() {
-      this.setEntry(Object.assign({},this.form))
+      this.setEntry(_.cloneDeep(this.form))
       this.updateData()
         .then(() => {
           this.$eventHub.$emit('update-success')

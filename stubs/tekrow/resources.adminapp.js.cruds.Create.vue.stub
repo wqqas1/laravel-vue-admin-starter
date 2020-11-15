@@ -74,7 +74,7 @@ export default {
     ...mapActions('{{ DummyTextPlu }}Single', ['storeData', 'resetState', 'setEntry']),
 
     submitForm() {
-      this.setEntry(Object.assign({},this.form))
+      this.setEntry(_.cloneDeep(this.form))
       this.storeData()
         .then(() => {
           this.$eventHub.$emit('create-success')
