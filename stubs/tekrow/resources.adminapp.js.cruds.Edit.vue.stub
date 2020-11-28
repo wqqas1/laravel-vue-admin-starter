@@ -94,7 +94,7 @@ export default {
       this.updateData()
         .then(() => {
           this.$eventHub.$emit('update-success')
-          this.$eventHub.$emit('{{ DummyTextPlu }}Success')
+          this.$eventHub.$emit('{{ DummyTextPlu }}EditSuccess')
         })
         .catch(error => {
           this.status = 'failed'
