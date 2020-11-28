@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <div class="modal fade" id="editMedicineBrand" tabindex="-1" role="dialog">
+    <div class="modal fade" id="edit{{ DummyText }}" tabindex="-1" role="dialog">
       <div class="modal-dialog">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <div class="modal-content">
@@ -123,6 +123,21 @@ export default {
   },
   computed: {
     ...mapGetters('{{ DummyTextPlu }}Index', ['data', 'total', 'loading'])
+  },
+  mounted(){
+    const self = this
+    self.$eventHub.$on(['{{ DummyTextPlu }}Edit'], async (id) =>{
+      self.showEdit(id);
+    });
+    self.$eventHub.$on(['{{ DummyTextPlu }}Delete'], async (id) =>{
+      self.deleteData(id);
+    });
+    self.$eventHub.$on(['{{ DummyTextPlu }}EditSuccess'], async (id) =>{
+      self.editSuccess();
+    });
+    self.$eventHub.$on(['{{ DummyTextPlu }}CreateSuccess'], async (id) =>{
+      self.createSuccess();
+    });
   },
   watch: {
     query: {

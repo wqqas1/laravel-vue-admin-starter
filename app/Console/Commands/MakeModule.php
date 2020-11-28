@@ -91,9 +91,10 @@ class MakeModule extends Command
      */
     protected function getFiles()
     {
-
-        mkdir(base_path("resources/adminapp/js/cruds/{$this->ArgumentPlu}"), 0755);
-        mkdir(base_path("resources/adminapp/js/store/cruds/{$this->ArgumentPlu}"), 0755);
+        if(!file_exists(base_path("resources/adminapp/js/cruds/{$this->ArgumentPlu}")))
+            mkdir(base_path("resources/adminapp/js/cruds/{$this->ArgumentPlu}"), 0755);
+        if(!file_exists(base_path("resources/adminapp/js/store/cruds/{$this->ArgumentPlu}")))
+            mkdir(base_path("resources/adminapp/js/store/cruds/{$this->ArgumentPlu}"), 0755);
         $files = [
             'app.Models.Model.php.stub' => "app/Models/{$this->Argument}.php",
             'app.Http.Controllers.Api.V1.Admin.ApiController.php.stub' => "app/Http/Controllers/Api/V1/Admin/{$this->ArgumentPlu}ApiController.php",
