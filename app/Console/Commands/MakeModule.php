@@ -14,7 +14,7 @@ class MakeModule extends Command
      *
      * @var string
      */
-    protected $signature = 'make:tkr-module {name}';
+    protected $signature = 'tkr:module {name}';
 
     /**
      * The console command description.
@@ -126,6 +126,7 @@ class MakeModule extends Command
             ['{{ dummy-text-plu }}','{{ dummy-text }}','{{ dummy_text_plu }}', '{{ dummy_text }}', '{{ DummyText }}', '{{ dummyText }}', '{{ DummyTextPlu }}', '{{ dummyTextPlu }}'],
             [
                 $this->argumentKebabPlu,
+                $this->argument_kebab,
                 $this->argument_plu,
                 $this->argument_snake,
                 $this->Argument,
