@@ -73,11 +73,11 @@ export default {
   watch: {
     id: {
       immediate: true,
-      async handler() {
+      async handler(value) {
         this.resetState()
         if(value == null)
           return
-        await this.fetchEditData(this.$route.params.id)
+        await this.fetchEditData(value)
         this.form = _.cloneDeep(this.entry)
       }
     }
