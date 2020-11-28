@@ -112,7 +112,7 @@ export default {
       ],
       query: { sort: 'id', order: 'desc', limit: 100 },
       xprops: {
-        module: '{{ DummyTextPlu }}Index',
+        module: '{{ DummyTextPlu }}',
         route: '{{ dummyTextPlu }}',
         permission_prefix: '{{ dummy_text }}_'
       }
