@@ -15,7 +15,7 @@ This is my personal starter with some custom stubs inspired by laraveldaily vuej
 
 ### Create Module
 
-- Run `php artisan make:tkr-module name`
+- Run `php artisan tkr:module name`
 This will create 
 1. Model in `app/Models` 
 2. Controller in `app/Http/Controllers/Api/V1/Admin` 
