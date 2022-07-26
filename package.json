@@ -11,7 +11,7 @@
     },
     "devDependencies": {
         "@casl/ability": "^4.1.5",
-        "@casl/vue": "^1.1.1",
+        "@casl/vue": "^2.0.1",
         "@laraveldaily/vue2-datatable": "^2.3.2",
         "axios": "^0.21",
         "cross-env": "^7.0.2",
